@@ -27,42 +27,38 @@ end
 
 -- end helpers
 
--- Function to delete exisiting engine swaps
-local function deleteExisting()
-    core_modmanager.deleteMod(GENERATED_PATH:gsub("/mods/unpacked/",''):lower())
-end
 
 local function checkForModName(nameToCheck)
     logToConsole('D', 'checkForModName', "Checking for mod: " .. nameToCheck)
     if not nameToCheck then return false end
     
-    -- local modValid = core_modmanager.checkMod(nameToCheck)
-    -- 
-    -- 
-    -- -- Check if mod exists and is valid
-    -- if modValid then
-    --     logToConsole('D', 'checkForModName', "Mod " .. nameToCheck .. " found and valid")
-    --     return true
-    -- end
-    -- nameToCheck = nameToCheck:lower()
-    -- modValid = core_modmanager.checkMod(nameToCheck)
-    -- -- Check if mod exists and is valid
-    -- if modValid then
-    --     logToConsole('D', 'checkForModName', "Mod " .. nameToCheck .. " found and valid")
-    --     return true
-    -- end
+    nameToCheck = nameToCheck:lower()
+    local mods = core_modmanager.getMods()
     
-    for _, mod in ipairs(core_modmanager.getMods()) do
-        if mod.modname == nameToCheck then
-            logToConsole('D', 'checkForModName', "Mod " .. nameToCheck .. " found and valid")
-            if mod.active then
-                logToConsole('D', 'checkForModName', "Mod " .. nameToCheck .. " is active")
-                return true
-            else 
-                logToConsole('D', 'checkForModName', "Mod " .. nameToCheck .. " is not active, activating")
-                core_modmanager.activateMod(mod.modname)
-                return true
+    if not mods then
+        logToConsole('E', 'checkForModName', "Failed to get mods list")
+        return false
+    end
+    
+    -- Iterate through mods table using pairs instead of ipairs
+    for modId, mod in pairs(mods) do
+        if mod and mod.modname and mod.modname:lower() == nameToCheck then
+            logToConsole('D', 'checkForModName', "Found mod: " .. mod.modname)
+            
+            -- Check if mod is valid
+            if not mod.valid then
+                logToConsole('W', 'checkForModName', "Mod " .. mod.modname .. " is not valid")
+                return false
             end
+            
+            -- Handle mod activation
+            if not mod.active then
+                logToConsole('D', 'checkForModName', "Activating mod: " .. modId)
+                core_modmanager.activateMod(modId)
+                logToConsole('D', 'checkForModName', "Mod " .. mod.modname .. " activated")
+            end
+            
+            return true
         end
     end
     
@@ -74,44 +70,38 @@ local function subscribeToGMSG()
     core_repository.modSubscribe("MFBSYCPZ9") -- GMSG ID
 end
 
--- Function to handle extension loading
-local function onModManagerReady()
-    logToConsole('D', 'onExtensionLoaded', "gmsgDownloader extension loaded")
-    if checkForModName("generalModSlotGenerator") then
-        logToConsole('D', 'onExtensionLoaded', "generalModSlotGenerator found")
-        GMSG_LOCAL_NAME = "generalModSlotGenerator"
-        return
-    else
-        logToConsole('E', 'onExtensionLoaded', "generalModSlotGenerator not found")
-    end
-    if checkForModName("TommoT_GMSG") then
-        logToConsole('D', 'onExtensionLoaded', "TommoT_GMSG found")
-        GMSG_LOCAL_NAME = "TommoT_GMSG"
-        return
-    else
-        logToConsole('E', 'onExtensionLoaded', "TommoT_GMSG not found")
-    end
-    if checkForModName("tommot_gmsg") then
-        logToConsole('D', 'onExtensionLoaded', "gmsgDownloader found")
-        GMSG_LOCAL_NAME = "tommot_gmsg"
-        return
-    else
-        logToConsole('E', 'onExtensionLoaded', "gmsgDownloader not found")
-    end
-    guihooks.trigger('modmanagerError', "GMSG Downloader requires generalModSlotGenerator or TommoT_GMSG to be installed")
-
-    subscribeToGMSG()
-
-    --core_modmanager.initDB()
-    -- deleteExisting()
-    -- Create job with 1/60 second max time per frame
-    --core_jobsystem.create(generateAllJob, 1/600)
-end
-
 -- Function to delete temporary files
 local function unloadExtension()
-    extensions.unloadExtension("gmsgDownloader")
+    extensions.unload("gmsgDownloader")
 end
+
+-- Function to handle extension loading
+local function onModManagerReady()
+    logToConsole('D', 'onModManagerReady', "gmsgDownloader extension loaded")
+    
+    -- List of possible mod names to check
+    local modNames = {
+        "generalModSlotGenerator",
+        "TommoT_GMSG"
+    }
+    
+    -- Check each mod name
+    for _, modName in ipairs(modNames) do
+        if checkForModName(modName) then
+            GMSG_LOCAL_NAME = modName
+            logToConsole('D', 'onModManagerReady', modName .. " found")
+            unloadExtension()
+            return
+        end
+        logToConsole('W', 'onModManagerReady', modName .. " not found")
+    end
+    
+    -- If we get here, no compatible mod was found
+    guihooks.trigger('modmanagerError', "GMSG Plugins require generalModSlotGenerator or TommoT_GMSG to be installed")
+    subscribeToGMSG()
+end
+
+
 
 -- Functions to be exported
 M.onModManagerReady = onModManagerReady
