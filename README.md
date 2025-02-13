@@ -3,3 +3,7 @@
 
 ## Usage for other mods
 This kind of acts like a simple version of dependency resolving and can be easily adjusted to work for other mods etc. (TODO: add vars for easy adjustments and tutorial)
+
+### TODO
+- Add version check (with repo)
+- variables for easier config (dev)
