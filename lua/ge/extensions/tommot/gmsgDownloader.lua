@@ -46,10 +46,10 @@ local function checkForModName(nameToCheck)
             logToConsole('D', 'checkForModName', "Found mod: " .. mod.modname)
             
             -- Check if mod is valid
-            if not mod.valid then
-                logToConsole('W', 'checkForModName', "Mod " .. mod.modname .. " is not valid")
-                return false
-            end
+            -- if not mod.valid then
+            --     logToConsole('W', 'checkForModName', "Mod " .. mod.modname .. " is not valid")
+            --     return false
+            -- end
             
             -- Handle mod activation
             if not mod.active then
