@@ -1,8 +1,26 @@
+-- Dependency resolver for BeamNG.drive by Toemmsen / TommoT
+-- This extension is used to check for the presence of the generalModSlotGenerator / MultiSlot mods
+-- If neither mod is found, the extension will subscribe to the GMSG repository and wait for the user to install the mod
+-- Once the mod is installed, the extension will activate the mod and unload itself
+-- If the mod is already installed, the extension will activate the mod and unload itself
+
 local M = {}
 M.dependencies = {"core_modmanager"}
 local LOGLEVEL = 2
-local AUTOPACK = true
-local GMSG_LOCAL_NAME = ""
+
+
+-- To adjust this to be used in your own extension, you need to change the following:
+local reqExtensionName = "tommot_modslotGenerator" -- Name of the extension to check for, if it is a lua extension
+-- List of possible mod names to check, will get converted to lowercase
+local reqModNames = {
+        "generalModSlotGenerator",
+        "TommoT_GMSG"
+}
+local reqModID = "MFBSYCPZ9" -- Mod ID to check for / subscribe to
+local extensionName = "gmsgDownloader" -- Name of this extension, preferably using the reqModID and "Downloader" or similar, needs to match the name in the extensions folder
+local failureMessage = "GMSG Plugins require generalModSlotGenerator or TommoT_GMSG to be installed" -- Message to display if the required mod is not found
+-- End of adjustments
+
 
 --helpers
 local function logToConsole(level, func, message)
@@ -22,7 +40,7 @@ local function logToConsole(level, func, message)
         log('E', func, message)
         return
     end
-    log(level, "gmsgDownloader", func .. ": " .. message)
+    log(level, extensionName, func .. ": " .. message)
 end
 
 -- end helpers
@@ -66,29 +84,28 @@ local function checkForModName(nameToCheck)
     return false
 end
 
-local function subscribeToGMSG()
-    core_repository.modSubscribe("MFBSYCPZ9") -- GMSG ID
+local function subscribeToRequiredMod()
+    core_repository.modSubscribe(reqModID) -- GMSG ID
 end
 
 -- Function to delete temporary files
 local function unloadExtension()
-    extensions.unload("gmsgDownloader")
+    extensions.unload(extensionName)
 end
 
 -- Function to handle extension loading
 local function onModManagerReady()
-    logToConsole('D', 'onModManagerReady', "gmsgDownloader extension loaded")
-    
-    -- List of possible mod names to check
-    local modNames = {
-        "generalModSlotGenerator",
-        "TommoT_GMSG"
-    }
+    logToConsole('D', 'onModManagerReady', extensionName .. "-dep-resolver extension loaded")
+
+    if extensions.isExtensionLoaded(reqExtensionName) then
+        logToConsole('D', 'onModManagerReady', reqExtensionName.." found and already loaded")
+        unloadExtension()
+        return
+    end
     
     -- Check each mod name
-    for _, modName in ipairs(modNames) do
+    for _, modName in ipairs(reqModNames) do
         if checkForModName(modName) then
-            GMSG_LOCAL_NAME = modName
             logToConsole('D', 'onModManagerReady', modName .. " found")
             unloadExtension()
             return
@@ -97,8 +114,8 @@ local function onModManagerReady()
     end
     
     -- If we get here, no compatible mod was found
-    guihooks.trigger('modmanagerError', "GMSG Plugins require generalModSlotGenerator or TommoT_GMSG to be installed")
-    subscribeToGMSG()
+    guihooks.trigger('modmanagerError', failureMessage)
+    subscribeToRequiredMod()
 end
 
 
@@ -107,6 +124,6 @@ end
 M.onModManagerReady = onModManagerReady
 M.onModDeactivated = unloadExtension
 M.onModActivated = onModManagerReady
-M.onExit = deleteTempFiles
+--M.onExit = deleteTempFiles
 
 return M
