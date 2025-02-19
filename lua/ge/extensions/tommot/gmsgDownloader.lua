@@ -18,6 +18,7 @@ local reqModNames = {
         "TommoT_GMSG"
 }
 local reqModID = "MFBSYCPZ9" -- Mod ID to check for / subscribe to
+local creatorName = "tommot" -- Name of the creator of this extension, needs to match the creator name in the extensions folder
 local extensionName = "gmsgDownloader" -- Name of this extension, preferably using the reqModID and "Downloader" or similar, needs to match the name in the extensions folder
 local failureMessage = "GMSG Plugins require generalModSlotGenerator or TommoT_GMSG to be installed" -- Message to display if the required mod is not found
 --------------------------------------------------------------------------------
@@ -90,9 +91,20 @@ local function subscribeToRequiredMod()
     core_repository.modSubscribe(reqModID) -- GMSG ID
 end
 
--- Function to delete temporary files
+-- Function to unload this extension
 local function unloadExtension()
-    extensions.unload(extensionName)
+    extensions.unload(creatorName.."_"..extensionName)
+end
+
+local function onModDeactivated(mod)
+    -- Check if mod is one of the mods connected to this script
+    local validMods = {
+        [extensionName] = true,
+    }
+    if validMods[mod.modname] then
+        unloadExtension() -- unloads this
+    end
+
 end
 
 -- Function to handle extension loading
@@ -124,7 +136,7 @@ end
 
 -- Functions to be exported
 M.onModManagerReady = onModManagerReady
-M.onModDeactivated = unloadExtension
+M.onModDeactivated = onModDeactivated
 M.onModActivated = onModManagerReady
 --M.onExit = deleteTempFiles
 
