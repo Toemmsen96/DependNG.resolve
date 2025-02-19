@@ -48,6 +48,28 @@ end
 
 -- end helpers
 
+-- dump(tommot_gmsgDownloader.checkForModID("MFBSYCPZ9")) to test
+local function checkForModID(idToCheck)
+    logToConsole('D', 'checkForModID', "Checking for mod: " .. idToCheck)
+    if not idToCheck then 
+        logToConsole('W', 'checkForModID', "No mod ID provided")
+        return false 
+    end
+    -- Check local mods folder for mod ID
+    if FS:directoryExists(idToCheck) then
+        logToConsole('D', 'checkForModID', "Found mod with ID: " .. idToCheck)
+        return true
+    end
+    if FS:directoryExists("mod_info/"..idToCheck) then
+        logToConsole('D', 'checkForModID', "Found mod with ID: " .. idToCheck)
+        return true
+    end
+    
+    logToConsole('D', 'checkForModID', "Mod with ID " .. idToCheck .. " not found")
+    return false
+
+end
+
 
 local function checkForModName(nameToCheck)
     logToConsole('D', 'checkForModName', "Checking for mod: " .. nameToCheck)
@@ -88,7 +110,7 @@ local function checkForModName(nameToCheck)
 end
 
 local function subscribeToRequiredMod()
-    core_repository.modSubscribe(reqModID) -- GMSG ID
+    core_repository.modSubscribe(reqModID) -- Uses ingame Repository and the mod ID to subscribe to the mod
 end
 
 -- Function to unload this extension
@@ -112,7 +134,13 @@ local function onModManagerReady()
     logToConsole('D', 'onModManagerReady', extensionName .. "-dep-resolver extension loaded")
 
     if extensions.isExtensionLoaded(reqExtensionName) then
-        logToConsole('D', 'onModManagerReady', reqExtensionName.." found and already loaded")
+        logToConsole('D', 'onModManagerReady', reqExtensionName.." found and already loaded, unloading dependency resolver")
+        unloadExtension()
+        return
+    end
+
+    if checkForModID(reqModID) then
+        logToConsole('D', 'onModManagerReady', reqModID .. " found, unloading dependency resolver")
         unloadExtension()
         return
     end
@@ -120,7 +148,7 @@ local function onModManagerReady()
     -- Check each mod name
     for _, modName in ipairs(reqModNames) do
         if checkForModName(modName) then
-            logToConsole('D', 'onModManagerReady', modName .. " found")
+            logToConsole('D', 'onModManagerReady', modName .. " found, unloading dependency resolver")
             unloadExtension()
             return
         end
@@ -138,6 +166,8 @@ end
 M.onModManagerReady = onModManagerReady
 M.onModDeactivated = onModDeactivated
 M.onModActivated = onModManagerReady
+M.checkForModID = checkForModID
+M.checkForModName = checkForModName
 --M.onExit = deleteTempFiles
 
 return M
