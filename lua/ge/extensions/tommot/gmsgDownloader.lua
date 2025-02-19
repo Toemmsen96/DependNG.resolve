@@ -8,7 +8,8 @@ local M = {}
 M.dependencies = {"core_modmanager"}
 local LOGLEVEL = 2
 
-
+-- START OF ADJUSTMENTS \/ EDIT BELOW THIS LINE \/
+--------------------------------------------------------------------------------
 -- To adjust this to be used in your own extension, you need to change the following:
 local reqExtensionName = "tommot_modslotGenerator" -- Name of the extension to check for, if it is a lua extension
 -- List of possible mod names to check, will get converted to lowercase
@@ -19,7 +20,8 @@ local reqModNames = {
 local reqModID = "MFBSYCPZ9" -- Mod ID to check for / subscribe to
 local extensionName = "gmsgDownloader" -- Name of this extension, preferably using the reqModID and "Downloader" or similar, needs to match the name in the extensions folder
 local failureMessage = "GMSG Plugins require generalModSlotGenerator or TommoT_GMSG to be installed" -- Message to display if the required mod is not found
--- End of adjustments
+--------------------------------------------------------------------------------
+-- END OF ADJUSTMENTS /\ EDIT ABOVE THIS LINE /\
 
 
 --helpers
