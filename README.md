@@ -1,6 +1,9 @@
 # gmsgDownloader
  Automatically downloads GMSG / Multislot if not found, just needs to be added to Plugins.
 
+## More Info / detailed instructions:
+[Toemmsen.ch Website](https://toemmsen.ch/posts/dependency_resolver/)
+
 ## Usage for other mods
 This kind of acts like a simple version of dependency resolving and can be easily adjusted to work for other mods etc. 
 ### Stuff needed to change for own mods
