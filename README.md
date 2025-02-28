@@ -4,9 +4,26 @@
 ## More Info / detailed instructions:
 [Toemmsen.ch Website](https://toemmsen.ch/posts/dependency_resolver/)
 
+## Dependency Installer UI
+This now features a dependency installer UI for easy integration into your own mod.
+
+To use, load it with GMSG / MultiSlot's UI in the Utils-Tab under the advanced options.
+As an alternative, you can load it by entering `extensions.load("tommot_depInstallerUi")` in the game's console.
+
+You only need this to be installed in your game for it to work (It will automatically install GMSG / MultiSlot if it isn't already, may change in the future)
+
+
+A full documentation on the website is on the way.
+
+<details>
+<summary>Dependency Installer UI</summary>
+
+![UI](ghImages/installerUI.png)
+</details>
+
 ## Usage for other mods
 This kind of acts like a simple version of dependency resolving and can be easily adjusted to work for other mods etc. 
-### Stuff needed to change for own mods
+### Stuff needed to change for own mods (ONLY NEEDED IF DOING MANUALLY WITHOUT UI)
 - Copy the lua and script folders with its content to the root of your mod
 <details>
 <summary>Example how it looks in file structure</summary>

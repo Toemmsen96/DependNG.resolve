@@ -3,6 +3,8 @@
 -- If neither mod is found, the extension will subscribe to the GMSG repository and wait for the user to install the mod
 -- Once the mod is installed, the extension will activate the mod and unload itself
 -- If the mod is already installed, the extension will activate the mod and unload itself
+-- Visit https://github.com/Toemmsen96/gmsgDownloader for the source on the GitHub-repo
+
 
 local M = {}
 M.dependencies = {"core_modmanager"}
