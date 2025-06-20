@@ -1,11 +1,11 @@
-# gmsgDownloader
- Automatically downloads GMSG / Multislot if not found, just needs to be added to Plugins.
+# DepNG.resolve
+Automated mod-dependency resolving for BeamNG.
 
 ## More Info / detailed instructions:
 [Toemmsen.ch Website](https://toemmsen.ch/posts/dependency_resolver/)
 
-## Dependency Resolver Installer UI
-This now features a dependency installer UI for easy integration into your own mod.
+## DepNG Installer UI
+This now features a DepNG installer UI for easy integration into your own mod.
 
 To use, load it with GMSG / MultiSlot's UI in the Utils-Tab under the advanced options.
 As an alternative, you can load it by entering `extensions.load("tommot_depInstallerUi")` in the game's console.
