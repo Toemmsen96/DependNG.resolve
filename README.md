@@ -4,7 +4,7 @@
 ## More Info / detailed instructions:
 [Toemmsen.ch Website](https://toemmsen.ch/posts/dependency_resolver/)
 
-## Dependency Installer UI
+## Dependency Resolver Installer UI
 This now features a dependency installer UI for easy integration into your own mod.
 
 To use, load it with GMSG / MultiSlot's UI in the Utils-Tab under the advanced options.
@@ -37,7 +37,7 @@ This kind of acts like a simple version of dependency resolving and can be easil
 - change /lua/ge/extensions/tommot/gmsgDownloader.lua to /lua/ge/extensions/"yourname"/"modname".lua
 - edit the following line in /scripts/"modname"/modScript.lua so this reflects your name and modname 
 ```lua 
-setExtensionUnloadMode("'yourname'/'modname'","manual")
+setExtensionUnloadMode("'yourname'_'modname'","manual")
 ``` 
 <details>
 <summary>Example for this specific mod</summary>
