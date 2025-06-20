@@ -33,8 +33,8 @@ This kind of acts like a simple version of dependency resolving and can be easil
 
 - Choose a fitting name, for example the required-mod-ID+Downloader as "modname"
 ➡ Here we take DependNG as "modname" instead, from here always enter your chosen "modname"
-- change foldername from /scripts/DependNG to /scripts/"modname"
-- change /lua/ge/extensions/tommot/DependNG.lua to /lua/ge/extensions/"yourname"/"modname".lua
+- change foldername from /scripts/gmsgDownloader to /scripts/"modname"
+- change /lua/ge/extensions/tommot/gmsgDownloader.lua to /lua/ge/extensions/"yourname"/"modname".lua
 - edit the following line in /scripts/"modname"/modScript.lua so this reflects your name and modname 
 ```lua 
 setExtensionUnloadMode("'yourname'_'modname'","manual")
