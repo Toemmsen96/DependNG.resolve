@@ -8,7 +8,7 @@ Automated mod-dependency resolving for BeamNG.
 This now features a DependNG installer UI for easy integration into your own mod.
 
 To use, load it with GMSG / MultiSlot's UI in the Utils-Tab under the advanced options.
-As an alternative, you can load it by entering `extensions.load("tommot_depInstallerUi")` in the game's console.
+As an alternative, you can load it by entering `extensions.load("tommot_dependnginstaller")` in the game's console.
 
 You only need this to be installed in your game for it to work (It will automatically install GMSG / MultiSlot if it isn't already, may change in the future)
 
@@ -16,14 +16,13 @@ You only need this to be installed in your game for it to work (It will automati
 A full documentation on the website is on the way.
 
 <details>
-<summary>Dependency Installer UI</summary>
+<summary>DependNG.resolve Installer UI</summary>
 
 ![UI](ghImages/installerUI.png)
 </details>
 
-## Usage for other mods
-This kind of acts like a simple version of dependency resolving and can be easily adjusted to work for other mods etc. 
-### Stuff needed to change for own mods (ONLY NEEDED IF DOING MANUALLY WITHOUT UI)
+
+### Manual Install (without the Installer UI)
 - Copy the lua and script folders with its content to the root of your mod
 <details>
 <summary>Example how it looks in file structure</summary>
@@ -32,7 +31,7 @@ This kind of acts like a simple version of dependency resolving and can be easil
 </details>
 
 - Choose a fitting name, for example the required-mod-ID+Downloader as "modname"
-➡ Here we take DependNG as "modname" instead, from here always enter your chosen "modname"
+➡ Here we take gmsgDownloader as "modname", from here on always enter your own chosen "modname"
 - change foldername from /scripts/gmsgDownloader to /scripts/"modname"
 - change /lua/ge/extensions/tommot/gmsgDownloader.lua to /lua/ge/extensions/"yourname"/"modname".lua
 - edit the following line in /scripts/"modname"/modScript.lua so this reflects your name and modname 
@@ -40,9 +39,11 @@ This kind of acts like a simple version of dependency resolving and can be easil
 setExtensionUnloadMode("'yourname'_'modname'","manual")
 ``` 
 <details>
-<summary>Example for this specific mod</summary>
+<summary>Example for gmsgDownloader</summary>
 
-![modScript.lua example](ghImages/modScript.png)
+```lua 
+setExtensionUnloadMode("tommot_gmsgDownloader","manual")
+``` 
 </details>
 
 - edit /lua/ge/extensions/"yourname"/"modname".lua:

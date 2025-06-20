@@ -1,5 +1,6 @@
--- Barebones UI
--- Author: Toemmsen / TommoT
+-- Installer UI for DependNG.resolve
+-- This script provides a user interface for installing the DependNG.resolve extension into a mod, so that it can resolve dependencies for other mods.
+-- Author: Toemmsen / TommoT, GitHub repository: https://github.com/Toemmsen96/DependNG.resolve
 
 local M = {}
 M.dependencies = {"ui_imgui"}
@@ -79,7 +80,7 @@ local function installMod(modID, possibleNames,installToModName, moddersName)
 
     -- Create the file path
     if not core_modmanager.modIsUnpacked(installToModName) then
-        log('W', 'installMod', "Mod " .. installToModName .. " is packed, cannot install dependency")
+        log('W', 'installMod', "Mod " .. installToModName .. " is packed, cannot install DependNG.resolve")
         imgui.OpenPopup("Error##packedmod")
         return true -- Return true to prevent the error popup from showing
     end
@@ -146,7 +147,7 @@ local function installMod(modID, possibleNames,installToModName, moddersName)
     
     -- Write the modified file
     if writeFile(filePath, modifiedContent) and writeFile(modScriptOutPath, modifiedModScriptContent) then
-        log('I', 'installMod', "Successfully installed dependency checker at " .. filePath)
+        log('I', 'installMod', "Successfully installed DependNG.resolve at " .. filePath)
     return true
 
     else
@@ -162,11 +163,11 @@ local function renderTopBar()
     imgui.SetCursorPosY(-style.ItemSpacing.y + imgui.GetScrollY())
     imgui.PushFont3("cairo_bold")
 
-    imgui.Text("Dependency Installer")
+    imgui.Text("DependNG.resolve Installer")
 
     imgui.SetCursorPosX(imgui.GetWindowWidth() - imgui.CalcTextSize("X").x - style.FramePadding.x * 2 - style.WindowPadding.x)
     if imgui.Button("X") then
-        extensions.unload("tommot_depInstallerUi")
+        extensions.unload("tommot_dependnginstaller")
     end
     imgui.SetCursorPosX(0)
     imgui.PopFont()
@@ -208,7 +209,7 @@ local function render()
         imgui.EndCombo()
     end
     
-    imgui.Text("Select a Mod to install dependency into:")
+    imgui.Text("Select a Mod to install DependNG.resolve into:")
     
     if #cachedModNames == 0 then
         local mods = findMods()
@@ -291,7 +292,7 @@ local function render()
     end
     
     if imgui.BeginPopupModal("Error##targetmod", nil, imgui.WindowFlags_AlwaysAutoResize) then
-        imgui.Text("Please select a target mod to install the dependency into.")
+        imgui.Text("Please select a target mod to install DependNG.resolve into.")
         if imgui.Button("OK") then imgui.CloseCurrentPopup() end
         imgui.EndPopup()
     end
@@ -303,7 +304,7 @@ local function render()
     end
 
     if imgui.BeginPopupModal("Error##packedmod", nil, imgui.WindowFlags_AlwaysAutoResize) then
-        imgui.Text("The target mod is packed, cannot install dependency.")
+        imgui.Text("The target mod is packed, cannot install DependNG.resolve.")
         imgui.Text("Do you want to unpack the mod?")
         if imgui.Button("NO") then imgui.CloseCurrentPopup() end
         if imgui.Button("YES") then 
@@ -314,7 +315,7 @@ local function render()
     end
 
     if imgui.BeginPopupModal("Error##installation", nil, imgui.WindowFlags_AlwaysAutoResize) then
-        imgui.Text("Got an error while trying to install the dependency. Check the log / console for more information.")
+        imgui.Text("Got an error while trying to intall DependNG.resolve. Check the log / console for more information.")
         if imgui.Button("OK") then imgui.CloseCurrentPopup() end
         imgui.EndPopup()
     end
