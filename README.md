@@ -1,11 +1,11 @@
-# DependeNG.resolve
+# DependNG.resolve
 Automated mod-dependency resolving for BeamNG.
 
 ## More Info / detailed instructions:
 [Toemmsen.ch Website](https://toemmsen.ch/posts/dependency_resolver/)
 
-## DependeNG Installer UI
-This now features a DependeNG installer UI for easy integration into your own mod.
+## DependNG Installer UI
+This now features a DependNG installer UI for easy integration into your own mod.
 
 To use, load it with GMSG / MultiSlot's UI in the Utils-Tab under the advanced options.
 As an alternative, you can load it by entering `extensions.load("tommot_depInstallerUi")` in the game's console.
