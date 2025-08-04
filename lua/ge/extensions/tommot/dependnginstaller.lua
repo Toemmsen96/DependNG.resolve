@@ -10,7 +10,9 @@ local imgui = ui_imgui
 local style = imgui.GetStyle()
 local ffi = require("ffi")
 
-local TEMPLATE_NAME = "gmsgDownloader"
+local TEMPLATE = "dependng_template.lua"
+local MS_TEMPLATE = "ms_template.lua"
+local TEMPLATE_DIR = "/lua/ge/extensions/tommot/templates/"
 
 -- Settings
 local possibleNames = ffi.new("char[?]", 256, "")
@@ -85,7 +87,7 @@ local function installMod(modID, possibleNames,installToModName, moddersName)
         return true -- Return true to prevent the error popup from showing
     end
     local targetModPath = "mods/unpacked/" .. installToModName .. "/lua/ge/extensions/" .. moddersName .. "/"
-    local filePath = targetModPath .. modID.."_Downloader.lua"
+    local filePath = targetModPath .. modID.."Downloader.lua"
 
     -- Create the directories if they don't exist
     if not FS:directoryExists(targetModPath) then
@@ -93,7 +95,7 @@ local function installMod(modID, possibleNames,installToModName, moddersName)
     end
 
     -- Read template file
-    local sourceFile = "/lua/ge/extensions/tommot/"..TEMPLATE_NAME..".lua"
+    local sourceFile = TEMPLATE_DIR .. TEMPLATE
     local content = readFile(sourceFile)
     
     if not content then
@@ -124,23 +126,23 @@ local function installMod(modID, possibleNames,installToModName, moddersName)
         "}\n" ..
         "local reqModID = \"" .. modID .. "\" -- Mod ID to check for / subscribe to\n" ..
         "local creatorName = \"" .. moddersName .. "\" -- Name of the creator of this extension, needs to match the creator name in the extensions folder\n" ..
-        "local extensionName = \""..modID.."_Downloader\" -- Name of this extension, preferably using the reqModID and \"Downloader\" or similar, needs to match the name in the extensions folder\n" ..
+        "local extensionName = \""..modID.."Downloader\" -- Name of this extension, preferably using the reqModID and \"Downloader\" or similar, needs to match the name in the extensions folder\n" ..
         "local failureMessage = \"This mod requires ".. modID .. " to be installed\" -- Message to display if the required mod is not found\n" ..
         "--------------------------------------------------------------------------------\n" ..
         "-- END OF ADJUSTMENTS /\\ EDIT ABOVE THIS LINE /\\"
     )
 
     -- ModScript.lua
-    local modScriptTemplatePath = "/scripts/"..TEMPLATE_NAME.."/modScript.lua"
+    local modScriptTemplatePath = TEMPLATE_DIR .. MS_TEMPLATE
     local modScriptContent = readFile(modScriptTemplatePath)
-    local modScriptOutPath = "mods/unpacked/" .. installToModName .. "/scripts/" .. modID.."_Downloader/modScript.lua"
+    local modScriptOutPath = "mods/unpacked/" .. installToModName .. "/scripts/" .. modID.."Downloader/modScript.lua"
     if not modScriptContent then
         log('E', 'installMod', "Failed to read ModScript.lua")
         return false
     end
     local modifiedModScriptContent = modScriptContent:gsub(
-        "tommot/gmsgDownloader",
-        moddersName.."/"..modID.."_Downloader"
+        "tommot_gmsgDownloader",
+        moddersName.."_"..modID.."Downloader"
     )
     
 
