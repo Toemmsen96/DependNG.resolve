@@ -3,7 +3,7 @@
         "cat":"menu",
         "order": 0,
         "ctx": "tlua",
-        "onDown": "if not tommot_dependnginstaller then extensions.load(\"tommot_dependnginstaller\") end",
+        "onDown": "if not tommot_dependnginstaller then extensions.load(\"tommot_dependnginstaller\") else extensions.unload(\"tommot_dependnginstaller\") end",
         "actionMap": "Global",
         "title": "Toggle DependNG.resolve - Installer",
         "desc": "Shows or hides the UI window for the DependNG.resolve - Installer by TommoT."

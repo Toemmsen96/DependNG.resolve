@@ -13,6 +13,7 @@ local ffi = require("ffi")
 local TEMPLATE = "dependng_template.lua"
 local MS_TEMPLATE = "ms_template.lua"
 local TEMPLATE_DIR = "/lua/ge/extensions/tommot/templates/"
+local CLOSE_TEXT = " Close Installer "
 
 -- Settings
 local possibleNames = ffi.new("char[?]", 256, "")
@@ -159,6 +160,16 @@ local function installMod(modID, possibleNames,installToModName, moddersName)
     
 end
 
+local function renderToolTip(text)
+    imgui.SameLine()
+    imgui.TextDisabled("(?)")
+    if imgui.IsItemHovered() then
+        imgui.BeginTooltip()
+        imgui.Text(text)
+        imgui.EndTooltip()
+    end
+end
+
 
 
 local function renderTopBar()
@@ -167,9 +178,14 @@ local function renderTopBar()
 
     imgui.Text("DependNG.resolve Installer")
 
-    imgui.SetCursorPosX(imgui.GetWindowWidth() - imgui.CalcTextSize("X").x - style.FramePadding.x * 2 - style.WindowPadding.x)
-    if imgui.Button("X") then
+    imgui.SetCursorPosX(imgui.GetWindowWidth() - imgui.CalcTextSize(CLOSE_TEXT).x - style.FramePadding.x * 2 - style.WindowPadding.x)
+    if imgui.Button(CLOSE_TEXT) then
         extensions.unload("tommot_dependnginstaller")
+    end
+    if imgui.IsItemHovered() then
+        imgui.BeginTooltip()
+        imgui.Text("Close and unload the installer UI.")
+        imgui.EndTooltip()
     end
     imgui.SetCursorPosX(0)
     imgui.PopFont()
@@ -184,9 +200,12 @@ local function render()
     imgui.BeginMenuBar()
     renderTopBar()
     imgui.EndMenuBar()
-    
+
+    -- TODO: Add Checkboxes / Settings for options
+
     -- Option selection
     imgui.Text("Select an ModID:")
+    renderToolTip("Enter the mod's Unique ID, found on BeamNG's mod-page under \"Information\".")
 
     if #cachedModIDs == 0 then
         cachedModIDs = findModIDs()
@@ -212,6 +231,7 @@ local function render()
     end
     
     imgui.Text("Select a Mod to install DependNG.resolve into:")
+    renderToolTip("This is the mod that will get DependNG.resolve installed into, so that it can resolve THIS mod's dependencies.")
     
     if #cachedModNames == 0 then
         local mods = findMods()
@@ -243,16 +263,11 @@ local function render()
     
     -- Text input
     imgui.Text("Enter possible names for the required mod, separated by a comma (,):")
+    renderToolTip("These names will be used to check if the required mod is installed, in case the ModID is not present. Example: 'DependNG.resolve, DependNG Resolve, dependng.resolve'")
     imgui.InputText("##possibleNames", possibleNames, 256)
     
     imgui.Text("Enter your name:")
-    imgui.SameLine()
-    imgui.TextDisabled("(?)")
-    if imgui.IsItemHovered() then
-        imgui.BeginTooltip()
-        imgui.Text("Extension will be saved here")
-        imgui.EndTooltip()
-    end
+    renderToolTip("This is needed to save the generated files into a unique folder inside the extensions directory of the target mod.")
     imgui.InputText("##moddersName", moddersName, 256)
 
     -- Display selection
@@ -271,7 +286,8 @@ local function render()
     imgui.Text("Modder's Name: " .. (ffi.string(moddersName) ~= "" and ffi.string(moddersName) or "Not specified"))
     
     -- Action button
-    if imgui.Button("Install") then
+    if imgui.Button(" Install ") then
+        
         -- Validate inputs before installation
         if selectedOptionID == "Select" then
             imgui.OpenPopup("Error##modid")
@@ -284,6 +300,11 @@ local function render()
             imgui.OpenPopup("Error##installation")
             end
         end
+    end
+    if imgui.IsItemHovered() then
+        imgui.BeginTooltip()
+        imgui.Text("Starts the installation of DependNG.resolve into the selected mod.")
+        imgui.EndTooltip()
     end
     
     -- Error popups
