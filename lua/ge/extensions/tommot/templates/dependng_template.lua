@@ -1,9 +1,10 @@
 -- Dependency resolver for BeamNG.drive by Toemmsen / TommoT
--- This extension is used to check for the presence of the generalModSlotGenerator / MultiSlot mods
--- If neither mod is found, the extension will subscribe to the GMSG repository and wait for the user to install the mod
+-- This extension is used to check for the presence of required mods
+-- If the mod is not found, the extension will subscribe to it using the BeamNG repository 
 -- Once the mod is installed, the extension will activate the mod and unload itself
 -- If the mod is already installed, the extension will activate the mod and unload itself
--- Visit https://github.com/Toemmsen96/gmsgDownloader for the source on the GitHub-repo
+-- This extension was automatically generated and installed using DependNG.resolve
+-- Visit https://github.com/Toemmsen96/DependNG.resolve for the source on the GitHub-repo
 
 
 local M = {}
@@ -50,6 +51,11 @@ end
 
 -- end helpers
 
+local function activateModByName(modName)
+    logToConsole('D', 'activateModByName', "Activating mod: " .. modName)
+    core_modmanager.activateMod(modName)
+end
+
 -- dump(tommot_gmsgDownloader.checkForModID("MFBSYCPZ9")) to test
 local function checkForModID(idToCheck)
     logToConsole('D', 'checkForModID', "Checking for mod: " .. idToCheck)
@@ -66,10 +72,23 @@ local function checkForModID(idToCheck)
         logToConsole('D', 'checkForModID', "Found mod with ID: " .. idToCheck)
         return true
     end
+    -- Use mod manager to find mod by ID
+    local modName = core_modmanager.getModNameFromID(idToCheck)
+    if modName then
+        logToConsole('D', 'checkForModID', "Found mod with ID: " .. idToCheck .. " (name: " .. modName .. ")")
+        local modData = core_modmanager.getModDB(modName)
+        if modData then
+            -- Activate mod if not already active
+            if not modData.active then
+                logToConsole('D', 'checkForModID', "Activating mod: " .. modName)
+                core_modmanager.activateMod(modName)
+            end
+            return true
+        end
+    end
     
     logToConsole('D', 'checkForModID', "Mod with ID " .. idToCheck .. " not found")
     return false
-
 end
 
 

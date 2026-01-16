@@ -56,6 +56,10 @@ find stuff to edit below
 <details>
 <summary>Current todo list:</summary>
 
-- [ ] Add version check (with repo)
+- [ ] Add version check for the requirements (with repo)
 - [x] Variables for easier config (dev) *implemented*
+- [ ] Add disclaimer when output will overwrite
+- [ ] Add an update checker for the scripts (check if the subscription script is up to date)
+- [ ] Maybe add some templates for the requirements
+- [ ] Release on repo as just the installer
 </details>
