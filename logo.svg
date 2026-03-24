@@ -1,0 +1,45 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4FC3F7"/>
+      <stop offset="100%" stop-color="#00E676"/>
+    </linearGradient>
+  </defs>
+
+  <style>
+    .edge { stroke: #5C6B73; stroke-width: 2; opacity: 0.6; }
+    .highlight { stroke: url(#grad); stroke-width: 3; }
+    .node { fill: #ECEFF1; }
+    .core { fill: url(#grad); }
+    .title {
+      fill: #ECEFF1;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    .accent { fill: url(#grad); }
+  </style>
+
+  <rect x="0" y="0" width="200" height="200" fill="#000000"/>
+
+  <!-- Graph -->
+  <line x1="40" y1="130" x2="100" y2="90" class="edge"/>
+  <line x1="40" y1="50" x2="100" y2="90" class="edge"/>
+  <line x1="100" y1="90" x2="160" y2="50" class="highlight"/>
+  <line x1="100" y1="90" x2="160" y2="130" class="edge"/>
+
+  <!-- Nodes -->
+  <circle cx="40" cy="50" r="5" class="node"/>
+  <circle cx="40" cy="130" r="5" class="node"/>
+  <circle cx="100" cy="90" r="6" class="core"/>
+  <circle cx="160" cy="50" r="5" class="node"/>
+  <circle cx="160" cy="130" r="5" class="node"/>
+
+  <!-- Arrow -->
+
+  <!-- Text -->
+  <text x="30" y="160" class="title">
+    DependNG<tspan class="accent">.resolve</tspan>
+  </text>
+</svg>
